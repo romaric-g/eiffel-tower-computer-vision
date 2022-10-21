@@ -47,12 +47,30 @@ FE1 = ones(163, 310);
 
 imgOmo = cat(3, X1,Y1,FE1);
 
-
 H = [1 0 0 ; 0 1 0 ; 0 0 (1/1.25)];
 
-%% Couple construction
+%% --------
+%
+% V1
+%
+% ----------
+
+%% Lecture d'une frame
 
 clear all
+close all
+
+video = VideoReader("video.mp4");
+
+frame = read(video, 60);
+
+figure, imshow(frame) 
+
+load('pointxy.mat')
+
+line(x,y)
+
+%% Couple construction
 
 img = imread("index.jpg");
 
@@ -65,21 +83,54 @@ end
 
 CPS = CPSB.';
 
-%% 
+%% Définition d'une matric homographique
 
 H = [1 0 0 ; 0 1 0 ; 0 0 (1/1.25)];
 
 CPSR = H*CPS;
 
-CPSRH = [CPSR(1,:) ./ CPSR(3,:) ; CPSR(2,:) ./ CPSR(3,:) ];
+x = CPSR(1,:) ./ CPSR(3,:);
+y = CPSR(2,:) ./ CPSR(3,:);
 
-%%
+MaxX = max(x);
+MaxY = max(y);
 
-MaxX = max(CPSRH(1, :));
-MaxY = max(CPSRH(2, :));
+MinX = min(x);
+MinY = min(y);
 
-MinX = min(CPSRH(1, :));
-MinY = min(CPSRH(2, :));
+
+%% Image try 2
+
+img = imread("index.jpg");
+
+[h,w,c] = size(img);
+sortie=[ 1 1; w 1 ;w h;1 h];
+
+H = CalculHomographie([x y], sortie);
+
+Masque = CreationMasque(frame);
+
+figure, imshow(Masque);
+
+
+for y1=1:h
+    for x1=1:w
+        H2=H*[x1;y1;1];
+        x2=round(H2(1)/H2(3));
+        y2=round(H2(2)/H2(3));
+        for k=1:c
+            if (Masque(y2,x2)~=0)
+                frame(y2,x2,k)=img(y1,x1,k);
+            end
+        end
+    end
+end
+
+figure,imshow(frame)
+
+
+
+
 
 
 
