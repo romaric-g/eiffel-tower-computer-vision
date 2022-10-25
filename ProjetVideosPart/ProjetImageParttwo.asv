@@ -1,53 +1,4 @@
 
-video = VideoReader("video.mp4");
-
-if hasFrame(video)
-    img = readFrame(video);
-    
-    figure, imshow(img) 
-    
-    x = [685;1340;1427;628];
-    y = [413;242;583;773];
-
-    line(x,y)
-
-    A = imread("index.jpg");
-
-    H = [1 0 0; 0 1 0; 0 0 1/1.25];
-
-    P = meshgrid(163,310);
-
-    Pf = H*P;
-
-    % Partie homographie sur l'image
-
-end
-
-%% Test sur un point 
-
-clear all
-
-fe = 1;
-
-X1 = [100*fe 100*fe fe];
-H = [1 0 0 ; 0 1 0 ; 0 0 (1/1.25)];
-X2 = X1*H;
-
-%%
-clear all
-
-img = imread("index.jpg");
-
-x = 1:310;
-y = 1:163;
-
-[X1,Y1] = meshgrid(x,y);
-
-FE1 = ones(163, 310);
-
-imgOmo = cat(3, X1,Y1,FE1);
-
-H = [1 0 0 ; 0 1 0 ; 0 0 (1/1.25)];
 
 %% --------
 %
@@ -70,77 +21,59 @@ load('pointxy.mat')
 
 line(x,y)
 
-%% Couple construction
-
-img = imread("index.jpg");
-
-CPSB = [];
-for x = 0:size(img, 1)-1
-    for y = 0:size(img, 2)-1
-        CPSB = [CPSB; x y 1];
-    end
-end
-
-CPS = CPSB.';
-
-%% Définition d'une matric homographique
-
-H = [1 0 0 ; 0 1 0 ; 0 0 (1/1.25)];
-
-CPSR = H*CPS;
-
-x = CPSR(1,:) ./ CPSR(3,:);
-y = CPSR(2,:) ./ CPSR(3,:);
-
-MaxX = max(x);
-MaxY = max(y);
-
-MinX = min(x);
-MinY = min(y);
-
-
 %% Image try 2
 
-img = imread("index.jpg");
+load('pointxy.mat')
 
-[h,w,c] = size(img);
+I = imread("index.jpg");
 
-sortie=[ 1 1; w 1 ;w h;1 h];
+[Iheight,Iwidth,Ic] = size(I);
+[frameHeight,frameWidth,frameC] = size(frame);
+
+sortie=[ 1 1; Iwidth 1 ;Iwidth Iheight;1 Iheight];
 
 H = CalculHomographie([x y], sortie);
-I = frame;
+
 
 Masque = CreationMasque(frame);
 
-figure, imshow(Masque);
+figure,imshow(Masque)
+
+frame2 = frame;
 
 
-for i=1:h
-    for j=1:w
+
+for i=1:frameHeight
+    for j=1:frameWidth
         H2=H*[j;i;1];
 
-        H2(H2 < 1) = 1;
-        H2(H2 > h - 0.001) = h - 0.001;
-        x1 = floor(x);
-        x2 = x1 + 1;
+        x=H2(1)/H2(3);
+        y=H2(2)/H2(3);
 
-        x2=round(H2(1)/H2(3));
-        y2=round(H2(2)/H2(3));
+        if (x > 0 && x < Iwidth && y > 0 && y > Iheight)
 
-        if (Masque(y2,x2)~=0)
-
-            frame(y2,x2,k)=img(y1,x1,k);
+            x1 = min(max(floor(x), 1), Iwidth);
+            y1 = min(max(floor(y), 1), Iheight);
+    
+            x2 = max(min(x1 + 1, Iwidth), 1);
+            y2 = max(min(y1 + 1, Iheight), 1);
+    
+            alpha = x-x1;
+            beta = y-y1;
+    
+            I11 = I(y1,x1);
+            I12 = I(y1,x2);
+            I21 = I(y2,x1); 
+            I22 = I(y2,x2);
+    
+            if (Masque(i,j)~=0)
+                frame2(i,j) = (1-alpha)*(1-beta)*I11 + (1-alpha)*beta*I12 + alpha*(1-beta)*I21 + alpha*beta*I22;
+            end
         end
     end
 end
 
 figure,imshow(frame)
-
-
-
-
-
-
-
+figure,imshow(frame2)
 
 
