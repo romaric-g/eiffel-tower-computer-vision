@@ -104,24 +104,42 @@ MinY = min(y);
 img = imread("index.jpg");
 
 [h,w,c] = size(img);
+
 sortie=[ 1 1; w 1 ;w h;1 h];
 
 H = CalculHomographie([x y], sortie);
+I = frame;
 
 Masque = CreationMasque(frame);
 
 figure, imshow(Masque);
 
 
-for y1=1:h
-    for x1=1:w
-        H2=H*[x1;y1;1];
-        x2=round(H2(1)/H2(3));
-        y2=round(H2(2)/H2(3));
-        for k=1:c
-            if (Masque(y2,x2)~=0)
-                frame(y2,x2,k)=img(y1,x1,k);
-            end
+for i=1:h
+    for j=1:w
+        H2=H*[j;i;1];
+
+        H2(H2 < 1) = 1;
+        H2(H2 > h - 0.001) = h - 0.001;
+        x1 = floor(x);
+        x2 = x1 + 1;
+        
+        H2(H2 < 1) = 1;
+        H2(H2 > w - 0.001) = w - 0.001;
+        y1 = floor(y);
+        y2 = y1 + 1;
+
+        alpha = x-x1;
+        beta = y-y1;
+
+        I11 = I(y1,x1);
+        I12 = I(y1,x2);
+        I21 = I(y2,x1); 
+        I22 = I(y2,x2);
+
+
+        if (Masque(y2,x2)~=0)
+            frame(i,j) = (1-alpha)*(1-beta)*I11 + (1-alpha)*beta*I12 + alpha*(1-beta)*I21 + alpha*beta*I22;
         end
     end
 end

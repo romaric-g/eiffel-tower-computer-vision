@@ -62,12 +62,11 @@ close all
 
 video = VideoReader("video.mp4");
 
-frame = readFrame(video);
+frame = read(video, 60);
 
 figure, imshow(frame) 
 
-x = [685;1340;1427;628];
-y = [413;242;583;773];
+load('pointxy.mat')
 
 line(x,y)
 
@@ -102,17 +101,34 @@ MinY = min(y);
 
 %% Image try 2
 
-H = [1 0 0 ; 0.2 1 0 ; 0 0 1];
 img = imread("index.jpg");
 
 [h,w,c] = size(img);
 
-for y1=1:h
-    for x1=1:w
-        H2=H*[x1;y1;1];
+sortie=[ 1 1; w 1 ;w h;1 h];
+
+H = CalculHomographie([x y], sortie);
+I = frame;
+
+Masque = CreationMasque(frame);
+
+figure, imshow(Masque);
+
+
+for i=1:h
+    for j=1:w
+        H2=H*[j;i;1];
+
+        H2(H2 < 1) = 1;
+        H2(H2 > h - 0.001) = h - 0.001;
+        x1 = floor(x);
+        x2 = x1 + 1;
+
         x2=round(H2(1)/H2(3));
         y2=round(H2(2)/H2(3));
-        for k=1:c
+
+        if (Masque(y2,x2)~=0)
+
             frame(y2,x2,k)=img(y1,x1,k);
         end
     end
