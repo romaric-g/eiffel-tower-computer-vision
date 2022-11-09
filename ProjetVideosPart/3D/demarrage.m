@@ -36,7 +36,7 @@ pout=[ 0 0 0; 1 0 0;1 1 0;0 1 0; 1/8 1/2 10; 1/2 1/4 20]; %Prend les points d'in
 pin=[x y];
 
 %On calcul la matrice de transfo 3D-2D
-H3D=HomographiePlusieursPoints3D(pin,pout);
+H3D=HomographieCalcul3D(pin,pout);
 
 %On détermine les extrémités des segments que nous souhaitons tracer dans le plan de la
 %feuille
