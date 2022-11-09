@@ -21,9 +21,7 @@ load('pointxy4.mat')
 
 line(x,y)
 
-
-
-I = imread("petite.jpg");
+I = imread("index.jpg");
 
 [Iheight,Iwidth,Ic] = size(I);
 [frameHeight,frameWidth,frameC] = size(frame);
@@ -58,22 +56,18 @@ for i=1:frameHeight
     
             alpha = x-x1;
             beta = y-y1;
-
-            for c = 1:3
-                I11 = I(y1,x1,c);
-                I12 = I(y2,x1,c);
-                I21 = I(y1,x2,c); 
-                I22 = I(y2,x2,c);
-        
-                if (Masque(i,j)~=0)
-                    frame2(i,j,c) = (1-alpha)*(1-beta)*I11 + (1-alpha)*beta*I12 + alpha*(1-beta)*I21 + alpha*beta*I22;
-                end
-            end
     
-            
+            I11 = I(y1,x1);
+            I12 = I(y1,x2);
+            I21 = I(y2,x1); 
+            I22 = I(y2,x2);
+    
+            % if (Masque(i,j)~=0)
+                frame2(i,j) = (1-alpha)*(1-beta)*I11 + (1-alpha)*beta*I12 + alpha*(1-beta)*I21 + alpha*beta*I22;
+            % end
         end
     end
 end
 
+figure,imshow(frame)
 figure,imshow(frame2)
-
