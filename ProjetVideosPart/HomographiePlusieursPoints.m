@@ -11,8 +11,8 @@ for i=1:taille(1)
 
 
     Mat2 = [ 
-           xi yi 1 0 0 0 (-xi*xf) (-xf*yi);
-           0 0 0 xi yi 1 (-xi*yf) (-yi*yf)
+           xi yi 1 0  0  0 (-xi*xf) (-xf*yi);
+           0  0  0 xi yi 1 (-xi*yf) (-yi*yf)
            ];
 
     A = [A;Mat2];
