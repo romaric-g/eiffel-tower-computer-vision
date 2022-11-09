@@ -17,13 +17,11 @@ frame = read(video, 60);
 
 figure, imshow(frame) 
 
-load('pointxy.mat')
+load('pointxy4.mat')
 
 line(x,y)
 
-%% Image try 2
-
-load('pointxy.mat')
+%%
 
 I = imread("index.jpg");
 
@@ -32,7 +30,7 @@ I = imread("index.jpg");
 
 sortie=[ 1 1; Iwidth 1 ;Iwidth Iheight;1 Iheight];
 
-H = CalculHomographie([x y], sortie);
+H = CalculHomographie(sortie,[x y]);
 
 
 Masque = CreationMasque(frame);
@@ -75,5 +73,3 @@ end
 
 figure,imshow(frame)
 figure,imshow(frame2)
-
-
