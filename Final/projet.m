@@ -101,7 +101,7 @@ newVideo = VideoWriter('newVideo','MPEG-4');
 open(newVideo)
 for i=1:nbFrames 
     XcoinsFeuilleT = XcoinsFeuille(i,:).';
-    YcoinsFeuilleT = XcoinsFeuille(i,:).';
+    YcoinsFeuilleT = YcoinsFeuille(i,:).';
     frame = read(video, i);
     nouvelleImage = RemplacerPapierParImage(frame,imageDeRemplacement,XcoinsFeuilleT,YcoinsFeuilleT);
     writeVideo(newVideo,nouvelleImage)
@@ -110,3 +110,4 @@ close(newVideo)
 
 %%
 implay('newVideo.mp4')
+
