@@ -98,13 +98,15 @@ implay('vidéoCoins.mp4')
 imageDeRemplacement = imread("imageDeRemplacement.jpg");
 
 newVideo = VideoWriter('newVideo','MPEG-4');
-
+open(newVideo)
 for i=1:nbFrames 
-    for j = 1:size(XcoinsFeuille,2)
-        frame = read(video, i);
-        nouvelleImage = RemplacerPapierParImage(frame,imageDeRemplacement,XcoinsFeuille(i,j),YcoinsFeuille(i,j));
-        writeVideo(newVideo,nouvelleImage)
-    end
+    XcoinsFeuilleT = XcoinsFeuille(i,:).';
+    YcoinsFeuilleT = XcoinsFeuille(i,:).';
+    frame = read(video, i);
+    nouvelleImage = RemplacerPapierParImage(frame,imageDeRemplacement,XcoinsFeuilleT,YcoinsFeuilleT);
+    writeVideo(newVideo,nouvelleImage)
 end
 close(newVideo)
 
+%%
+implay('newVideo.mp4')

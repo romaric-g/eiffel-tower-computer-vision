@@ -9,7 +9,7 @@ function [frame2] = RemplacerPapierParImage(frame, I, x, y)
     
     Masque = CreationMasque(frame);
     
-    figure,imshow(Masque)
+    %figure,imshow(Masque)
     
     frame2 = frame;
 
