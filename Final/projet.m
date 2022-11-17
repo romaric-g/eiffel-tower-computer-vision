@@ -2,27 +2,34 @@
 video = VideoReader("vid.mp4");
 %implay("vid.mp4")
 
+%% points 
+image = read(video,1);
+figure,imshow(image)
+I = CouleursIndexees(image);
+figure,imshow(I)
+D = DetecteurDeHarris(sigma1,sigma2,sigma3,lambda,I);
+figure,imshow(D)
+
 %% Initialisation des variables initiales 
 nbFrames = video.NumFrames;
-nbCoins = 4;
+nbCoins = 10;
 lambda = 0.05;
 sigma1 = 2;
 sigma2 = 3;
 sigma3 = 5;
 
-%Détection manuelle des 4 coins de la feuille (4 points initiaux)
+%Détection manuelle des nb coins de la feuille (nb points initiaux)
 imag = read(video,1);   %--> Image en "vraies couleurs"
 %figure , image(imag)
-%les coordonnées des 4 coins de la feuille mis dans une matrice 
-%dans l'ordre : Haut Gauche,  Haut Droite, Bas Droite, Bas Gauche
-coinsImag1 = [684 412;1340 237 ;1431 583;629 767];   
+%les coordonnées des nb coins de la feuille mis dans une matrice 
+coinsImag1 = [684 412;1340 237 ;1431 583;629 767; 729 524; 921 475; 882 596; 1152 451;989 436;1009 489];   
 
-% initialisation de la matrice des position x des 4 coins coins de la feuille pour chaque frame
+% initialisation de la matrice des position x des nb coins coins de la feuille pour chaque frame
 XcoinsFeuille = zeros(nbFrames,nbCoins);
-% initialisation de la matrice des position y des 4 coins coins de la feuille pour chaque frame
+% initialisation de la matrice des position y des nb coins coins de la feuille pour chaque frame
 YcoinsFeuille = zeros(nbFrames,nbCoins);
 
-%Ajout de la position initiale des 4 coins  
+%Ajout de la position initiale des nb coins  
 XcoinsFeuille(1,:)= coinsImag1(:,1);
 YcoinsFeuille(1,:)=coinsImag1(:,2);
 
@@ -79,7 +86,7 @@ save("matriceCoinsY.mat","YcoinsFeuille")
 videoCoins = VideoWriter('vidéoCoins','MPEG-4');
 open(videoCoins)
 
-position = zeros(4,2);
+position = zeros(nbCoins,2);
 
 for i=1:nbFrames
     image = read(video,i);
