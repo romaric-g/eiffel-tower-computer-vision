@@ -98,6 +98,7 @@ implay('vidéoCoins.mp4')
 imageDeRemplacement = imread("imageDeRemplacement.jpg");
 
 newVideo = VideoWriter('newVideo','MPEG-4');
+newVideo.FrameRate = 25;
 open(newVideo)
 for i=1:nbFrames 
     XcoinsFeuilleT = XcoinsFeuille(i,:).';
