@@ -8,7 +8,7 @@ figure,imshow(image)
 I = CouleursIndexees(image);
 figure,imshow(I)
 D = DetecteurDeHarris(sigma1,sigma2,sigma3,lambda,I);
-figure,imshow(D)
+figure,imshow()
 
 %% Initialisation des variables initiales 
 nbFrames = video.NumFrames;
