@@ -1,5 +1,5 @@
 function [frame2] = RemplacerPapierParImage(frame, I, x, y)
-    [Iheight,Iwidth,Ic] = size(I);
+    [Iheight,Iwidth,~] = size(I);
     [frameHeight,frameWidth,frameC] = size(frame);
     
     sortie=[ 1 1; Iwidth 1 ;Iwidth Iheight;1 Iheight];
@@ -9,7 +9,7 @@ function [frame2] = RemplacerPapierParImage(frame, I, x, y)
     
     Masque = CreationMasque(frame);
     
-    figure,imshow(Masque)
+    %figure,imshow(Masque)
     
     frame2 = frame;
 
