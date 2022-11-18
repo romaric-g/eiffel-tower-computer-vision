@@ -6,7 +6,6 @@ function [frame2] = RemplacerPapierParImage(frame, I, x, y)
     
     H = HomographiePlusieursPoints(sortie,[x y]);
     
-    
     Masque = CreationMasque(frame);
     
     %figure,imshow(Masque)
