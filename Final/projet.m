@@ -99,15 +99,17 @@ end
 save("matriceCoinsX.mat","XcoinsFeuille")
 save("matriceCoinsY.mat","YcoinsFeuille")
 
-%pour importer la matrice 
-% --> XcoinsFeuille = load('matriceCoinsX.mat') 
-% --> YcoinsFeuille = load('matriceCoinsY.mat')
+%% pour importer la matrice 
+
+XcoinsFeuille = load('matriceCoinsX.mat') 
+YcoinsFeuille = load('matriceCoinsY.mat')
 
 
 
 %% Création de la vidéo de vérification de la détection des coins 
 
 videoCoins = VideoWriter('vidéoCoins','MPEG-4');
+videoCoins.FrameRate = 25;
 open(videoCoins)
 
 position = zeros(nbCoins,2);
@@ -123,12 +125,29 @@ close(videoCoins)
 
 implay('vidéoCoins.mp4')
 
-
 %% Création de la vidéo avec l'image incrustée 
 
 imageDeRemplacement = imread("francais.jpg");
 
-newVideo = VideoWriter('newVideo','MPEG-4');
+newVideo = VideoWriter('newVideoReplace','MPEG-4');
+newVideo.FrameRate = 25;
+open(newVideo)
+
+for i=1:nbFrames 
+    XcoinsFeuilleT = XcoinsFeuille(i,:).';
+    YcoinsFeuilleT = YcoinsFeuille(i,:).';
+    frame = read(video, i);
+    frame2 = RemplacerPapierParImage(frame,imageDeRemplacement,XcoinsFeuilleT,YcoinsFeuilleT);
+  
+    writeVideo(newVideo,frame2)
+end
+close(newVideo)
+
+%% Création de la vidéo avec l'image incrustée  et 3D
+
+imageDeRemplacement = imread("francais.jpg");
+
+newVideo = VideoWriter('newVideo3D','MPEG-4');
 newVideo.FrameRate = 25;
 open(newVideo)
 
